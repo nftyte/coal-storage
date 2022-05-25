@@ -5,7 +5,7 @@ pragma solidity ^0.8.0;
 import { LibCoal } from "../libraries/LibCoal.sol";
 import { ICoalStorage } from "../interfaces/ICoalStorage.sol";
 
-contract CoalFacet is ICoalStorage {
+contract CoalStorageFacet is ICoalStorage {
     function faces() external view override returns (Face[] memory) {
         return LibCoal.faces();
     }
