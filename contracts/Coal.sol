@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.0;
 
-import { Diamond } from "@diamond/contracts/Diamond.sol";
+import { Diamond } from "./diamond/Diamond.sol";
 
 contract Coal is Diamond {
     constructor(address _contractOwner, address _diamondCutFacet)

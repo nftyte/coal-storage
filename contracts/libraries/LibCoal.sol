@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 import { ICoalStorage } from "../interfaces/ICoalStorage.sol";
-import { LibDiamond } from "@diamond/contracts/libraries/LibDiamond.sol";
+import { LibDiamond } from "../diamond/libraries/LibDiamond.sol";
 
 library LibCoal {
     bytes32 constant COAL_STORAGE_POSITION = keccak256("diamond.standard.coal.storage");
