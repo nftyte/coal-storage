@@ -38,7 +38,7 @@ library LibCoal {
         return (0, 0);
     }
 
-    function at(uint256 _i) internal returns (bytes memory) {
+    function at(uint256 _i) internal view returns (bytes memory) {
         (bytes4 face, uint256 i) = find(_i);
         require(face > 0, "LibCoal: Out of bounds");
 
@@ -47,10 +47,10 @@ library LibCoal {
         address facet = ds.facetAddressAndSelectorPosition[face].facetAddress;
         require(facet != address(0), "LibCoal: Function does not exist");
         
-        (bool success, bytes memory result) = facet.delegatecall(abi.encodeWithSelector(face, i));
+        (bool success, bytes memory result) = facet.staticcall(abi.encodeWithSelector(face, i));
 
         if (success) {
-            return result;
+            return abi.decode(result, (bytes));
         }
 
         if (result.length > 0) {
