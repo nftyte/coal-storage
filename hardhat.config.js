@@ -5,11 +5,11 @@ require("@nomiclabs/hardhat-ethers");
  * @type import('hardhat/config').HardhatUserConfig
  */
 module.exports = {
-    networks: {
-        hardhat: {
-            loggingEnabled: true,
-        },
-    },
+    // networks: {
+    //     hardhat: {
+    //         loggingEnabled: true,
+    //     },
+    // },
     solidity: {
         version: "0.8.12",
         settings: {
