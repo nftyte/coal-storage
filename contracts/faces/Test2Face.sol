@@ -4,10 +4,10 @@ pragma solidity ^0.8.0;
 
 import { LibReader } from "../libraries/LibReader.sol";
 
-contract TestFace2 {
+contract Test2Face {
     uint256 constant ITEM_SIZE = 20;
 
-    function testFace2(uint256 _i) external pure returns (bytes memory) {
+    function test2Face(uint256 _i) external pure returns (bytes memory) {
         return LibReader.read(_i * ITEM_SIZE, ITEM_SIZE, DATA);
     }
 
