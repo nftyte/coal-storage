@@ -50,7 +50,8 @@ library LibCoal {
         (bool success, bytes memory result) = facet.staticcall(abi.encodeWithSelector(face, i));
 
         if (success) {
-            return abi.decode(result, (bytes));
+            // return abi.decode(result, (bytes));
+            return result;
         }
 
         if (result.length > 0) {
