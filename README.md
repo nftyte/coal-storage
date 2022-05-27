@@ -8,7 +8,7 @@ An upgradable static database implementation utilizing [EIP-2535 Diamonds](https
 
 Static data is stored in coal faces, which double as diamond facets. View `contracts/faces/Test1Face.sol` and `contracts/faces/Test2Face.sol` for reference. Both files contain 1,000 random addresses in bytes constants.
 
-The `contracts/facets/CoalStorageFacet.sol` file is used to enumerate or retrieve information from coal faces.
+The `contracts/facets/CoalStorageFacet.sol` file is used to connect, enumerate, and retrieve information from coal faces externally. The internal implementation is available in `contracts/libraries/LibCoal.sol`.
 
 ## Deployment
 
@@ -23,6 +23,10 @@ npx hardhat run scripts/deploy.js
 ```console
 npx hardhat test
 ```
+
+## Contributions
+
+This is a WIP reference implementation. For contributions feel free to open an issue or contact me.
 
 ## Author
 
