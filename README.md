@@ -24,17 +24,15 @@ npx hardhat run scripts/deploy.js
 npx hardhat test
 ```
 
-## Contributions
+## Contributing
 
-This is a WIP reference implementation. For contributions feel free to open an issue or contact me.
+This is a WIP reference implementation. To contribute, feel free to open an issue or contact me.
 
 ## Author
 
 This example implementation was written by NFTyte.
 
-Contact:
-
-- https://twitter.com/nftyte
+Contact: https://twitter.com/nftyte
 
 ## License
 
