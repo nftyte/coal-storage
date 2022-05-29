@@ -16,9 +16,8 @@ describe.only("CoalTest", async function () {
     let diamondCutFacet;
     let diamondLoupeFacet;
     let ownershipFacet;
+    let coalCutFacet;
     let coalStorageFacet;
-    let tx;
-    let receipt;
     let result;
     const addresses = [];
 
@@ -36,17 +35,21 @@ describe.only("CoalTest", async function () {
             "OwnershipFacet",
             coalAddress
         );
+        coalCutFacet = await ethers.getContractAt(
+            "CoalCutFacet",
+            coalAddress
+        );
         coalStorageFacet = await ethers.getContractAt(
             "CoalStorageFacet",
             coalAddress
         );
     });
 
-    it("should have four facets -- call to facetAddresses function", async () => {
+    it("should have five facets -- call to facetAddresses function", async () => {
         for (const address of await diamondLoupeFacet.facetAddresses()) {
             addresses.push(address);
         }
-        assert.equal(addresses.length, 4);
+        assert.equal(addresses.length, 5);
     });
 
     it("facets should have the right function selectors -- call to facetFunctionSelectors function", async () => {
@@ -54,6 +57,7 @@ describe.only("CoalTest", async function () {
             diamondCutFacet,
             diamondLoupeFacet,
             ownershipFacet,
+            coalCutFacet,
             coalStorageFacet,
         ])) {
             result = await diamondLoupeFacet.facetFunctionSelectors(
@@ -68,10 +72,8 @@ describe.only("CoalTest", async function () {
             [addresses[0]]: ["0x1f931c1c"],
             [addresses[1]]: ["0xcdffacc6", "0x01ffc9a7"],
             [addresses[2]]: ["0xf2fde38b"],
-            [addresses[3]]: [
-                /*faces()*/ "0xd16df15f",
-                /*at(uint256)*/ "0xe0886f90",
-            ],
+            [addresses[3]]: [/*removeFaceAt(uint256)*/ "0x27ed671a"],
+            [addresses[4]]: [/*faces()*/ "0xd16df15f", /*at(uint256)*/ "0xe0886f90"],
         })) {
             for (let selector of selectors) {
                 assert.equal(
@@ -125,7 +127,7 @@ describe.only("CoalTest", async function () {
             },
         ];
 
-        await coalStorageFacet.addFaces(faces);
+        await coalCutFacet.addFaces(faces);
 
         for (let face of await coalStorageFacet.faces()) {
             assert.equal(

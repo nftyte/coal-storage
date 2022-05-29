@@ -10,15 +10,22 @@ async function deployCoal () {
   console.log('')
   console.log('Deploying facets')
   
-  const CoalStorageFacet = await ethers.getContractFactory('CoalStorageFacet')
-  const coalStorageFacet = await CoalStorageFacet.deploy()
-  await coalStorageFacet.deployed()
-  console.log(`CoalStorageFacet deployed: ${coalStorageFacet.address}`)
-  const cut = [{
-    facetAddress: coalStorageFacet.address,
-    action: FacetCutAction.Add,
-    functionSelectors: getSelectors(coalStorageFacet)
-  }]
+  const FacetNames = [
+    'CoalCutFacet',
+    'CoalStorageFacet'
+  ]
+  const cut = []
+  for (const FacetName of FacetNames) {
+    const Facet = await ethers.getContractFactory(FacetName)
+    const facet = await Facet.deploy()
+    await facet.deployed()
+    console.log(`${FacetName} deployed: ${facet.address}`)
+    cut.push({
+      facetAddress: facet.address,
+      action: FacetCutAction.Add,
+      functionSelectors: getSelectors(facet)
+    })
+  }
 
   console.log('')
   console.log('Diamond Cut:', cut)
