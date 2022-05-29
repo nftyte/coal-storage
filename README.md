@@ -16,7 +16,7 @@ The `contracts/facets/CoalStorageFacet.sol` file is used to connect, enumerate, 
 npx hardhat run scripts/deploy.js
 ```
 
-**Note:** This is the same as deploying a diamond, only with an extra facet in `CoalStorageFacet`.
+**Note:** This is the same as deploying a diamond, only with extra facets.
 
 ## Tests
 
