@@ -7,8 +7,8 @@ import { LibReader } from "../libraries/LibReader.sol";
 contract Test1Face {
     uint256 constant ITEM_SIZE = 20;
 
-    function test1Face(uint256 _i) external pure returns (bytes memory) {
-        return LibReader.read(_i * ITEM_SIZE, ITEM_SIZE, DATA);
+    function test1Face(uint256 _i) external pure returns (address) {
+        return address(bytes20(LibReader.read(_i * ITEM_SIZE, ITEM_SIZE, DATA)));
     }
 
     bytes constant DATA =

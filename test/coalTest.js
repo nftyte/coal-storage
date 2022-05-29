@@ -142,14 +142,15 @@ describe.only("CoalTest", async function () {
         const test2Face = await ethers.getContractAt("Test2Face", coalAddress);
 
         let fromStorage = ethers.utils.defaultAbiCoder.decode(
-            ["bytes"],
+            ["address"],
             await coalStorageFacet.at(999)
         )[0];
         let fromFace = await test1Face.test1Face(999);
+        
         assert.equal(fromStorage, fromFace);
 
         fromStorage = ethers.utils.defaultAbiCoder.decode(
-            ["bytes"],
+            ["address"],
             await coalStorageFacet.at(1000)
         )[0];
         fromFace = await test2Face.test2Face(0);
