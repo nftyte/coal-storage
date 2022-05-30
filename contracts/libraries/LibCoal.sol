@@ -49,14 +49,12 @@ library LibCoal {
         
         (bool success, bytes memory result) = facet.staticcall(abi.encodeWithSelector(face, i));
 
+        if (success) {
+            return result;
+        }
+
         assembly {
-            switch success
-                case 0 {
-                    revert(add(result, 0x20), returndatasize())
-                }
-                default {
-                    return(add(result, 0x20), returndatasize())
-                }
+            revert(add(result, 0x20), returndatasize())
         }
     }
 
