@@ -53,7 +53,7 @@ contract Coal {
             bytes memory result;
 
             if (selector == AT_SELECTOR) {
-                (uint256 i) = abi.decode(msg.data[4:], (uint256));
+                uint256 i = abi.decode(msg.data[4:], (uint256));
                 result = abi.encode(at(i));
             } else if (selector == FACES_SELECTOR) {
                 result = abi.encode(faces());
