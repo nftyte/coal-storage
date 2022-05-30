@@ -2,16 +2,15 @@
 
 const {
     getSelectors,
-    FacetCutAction,
+    FacetCutAction
 } = require("../scripts/libraries/diamond.js");
 
-const { deployCoal } = require("../scripts/deployCoal.js");
+const { deployDiamond } = require("../scripts/deployDiamond.js");
 
 const { assert } = require("chai");
 
-describe("Coal Test", async function () {
-    let coalAddress;
-    let coalStorage;
+describe("Diamond Test", async function () {
+    let diamondAddress;
     let diamondCutFacet;
     let diamondLoupeFacet;
     let ownershipFacet;
@@ -21,28 +20,34 @@ describe("Coal Test", async function () {
     const addresses = [];
 
     before(async function () {
-        coalAddress = await deployCoal();
-        coalStorage = await ethers.getContractAt("ICoalStorage", coalAddress);
+        diamondAddress = await deployDiamond();
         diamondCutFacet = await ethers.getContractAt(
             "DiamondCutFacet",
-            coalAddress
+            diamondAddress
         );
         diamondLoupeFacet = await ethers.getContractAt(
             "DiamondLoupeFacet",
-            coalAddress
+            diamondAddress
         );
         ownershipFacet = await ethers.getContractAt(
             "OwnershipFacet",
-            coalAddress
+            diamondAddress
         );
-        coalCutFacet = await ethers.getContractAt("CoalCutFacet", coalAddress);
+        coalCutFacet = await ethers.getContractAt(
+            "CoalCutFacet",
+            diamondAddress
+        );
+        coalStorageFacet = await ethers.getContractAt(
+            "CoalStorageFacet",
+            diamondAddress
+        );
     });
 
-    it("should have four facets -- call to facetAddresses function", async () => {
+    it("should have five facets -- call to facetAddresses function", async () => {
         for (const address of await diamondLoupeFacet.facetAddresses()) {
             addresses.push(address);
         }
-        assert.equal(addresses.length, 4);
+        assert.equal(addresses.length, 5);
     });
 
     it("facets should have the right function selectors -- call to facetFunctionSelectors function", async () => {
@@ -51,6 +56,7 @@ describe("Coal Test", async function () {
             diamondLoupeFacet,
             ownershipFacet,
             coalCutFacet,
+            coalStorageFacet,
         ])) {
             result = await diamondLoupeFacet.facetFunctionSelectors(
                 addresses[parseInt(i)]
@@ -65,6 +71,7 @@ describe("Coal Test", async function () {
             [addresses[1]]: ["0xcdffacc6", "0x01ffc9a7"],
             [addresses[2]]: ["0xf2fde38b"],
             [addresses[3]]: [/*removeFaceAt(uint256)*/ "0x27ed671a"],
+            [addresses[4]]: [/*faces()*/ "0xd16df15f", /*at(uint256)*/ "0xe0886f90"],
         })) {
             for (let selector of selectors) {
                 assert.equal(
@@ -86,7 +93,7 @@ describe("Coal Test", async function () {
     });
 
     it("should test function call", async () => {
-        const test1Face = await ethers.getContractAt("Test1Face", coalAddress);
+        const test1Face = await ethers.getContractAt("Test1Face", diamondAddress);
         await test1Face.test1Face(0);
     });
 
@@ -101,8 +108,8 @@ describe("Coal Test", async function () {
     });
 
     it("should connect coal faces", async () => {
-        const test1Face = await ethers.getContractAt("Test1Face", coalAddress);
-        const test2Face = await ethers.getContractAt("Test2Face", coalAddress);
+        const test1Face = await ethers.getContractAt("Test1Face", diamondAddress);
+        const test2Face = await ethers.getContractAt("Test2Face", diamondAddress);
         const faces = [
             [1000, getSelectors(test1Face).get(["test1Face(uint256)"])[0]],
             [1000, getSelectors(test2Face).get(["test2Face(uint256)"])[0]],
@@ -111,65 +118,27 @@ describe("Coal Test", async function () {
         await coalCutFacet.addFaces(faces);
 
         assert.sameDeepMembers(
-            (await coalStorage.faces()).map((f) => [...f]),
+            (await coalStorageFacet.faces()).map((f) => [...f]),
             faces
         );
     });
 
     it("should retrieve data from coal storage", async () => {
-        const test1Face = await ethers.getContractAt("Test1Face", coalAddress);
-        const test2Face = await ethers.getContractAt("Test2Face", coalAddress);
+        const test1Face = await ethers.getContractAt("Test1Face", diamondAddress);
+        const test2Face = await ethers.getContractAt("Test2Face", diamondAddress);
 
         let fromStorage = ethers.utils.defaultAbiCoder.decode(
             ["address"],
-            await coalStorage.at(999)
+            await coalStorageFacet.at(999)
         )[0];
-
         let fromFace = await test1Face.test1Face(999);
-
+        
         assert.equal(fromStorage, fromFace);
 
         fromStorage = ethers.utils.defaultAbiCoder.decode(
             ["address"],
-            await coalStorage.at(1000)
+            await coalStorageFacet.at(1000)
         )[0];
-
-        fromFace = await test2Face.test2Face(0);
-
-        assert.equal(fromStorage, fromFace);
-    });
-
-    it("should override coal storage functions", async () => {
-        coalStorageFacet = await deployFacet(
-            diamondCutFacet,
-            "CoalStorageFacet"
-        );
-        addresses.push(coalStorageFacet.address);
-        const selectors = getSelectors(coalStorageFacet);
-        result = await diamondLoupeFacet.facetFunctionSelectors(
-            coalStorageFacet.address
-        );
-        assert.sameMembers(result, selectors);
-    });
-
-    it("should retrieve data from coal storage", async () => {
-        const test1Face = await ethers.getContractAt("Test1Face", coalAddress);
-        const test2Face = await ethers.getContractAt("Test2Face", coalAddress);
-
-        let fromStorage = ethers.utils.defaultAbiCoder.decode(
-            ["address"],
-            await coalStorage.at(999)
-        )[0];
-
-        let fromFace = await test1Face.test1Face(999);
-
-        assert.equal(fromStorage, fromFace);
-
-        fromStorage = ethers.utils.defaultAbiCoder.decode(
-            ["address"],
-            await coalStorage.at(1000)
-        )[0];
-
         fromFace = await test2Face.test2Face(0);
 
         assert.equal(fromStorage, fromFace);

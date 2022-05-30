@@ -3,7 +3,7 @@
 
 const { getSelectors, FacetCutAction } = require('./libraries/diamond.js')
 
-async function deployDiamond () {
+async function deployCoal () {
   const accounts = await ethers.getSigners()
   const contractOwner = accounts[0]
 
@@ -13,11 +13,11 @@ async function deployDiamond () {
   await diamondCutFacet.deployed()
   console.log('DiamondCutFacet deployed:', diamondCutFacet.address)
 
-  // deploy Diamond
-  const Diamond = await ethers.getContractFactory('Diamond')
-  const diamond = await Diamond.deploy(contractOwner.address, diamondCutFacet.address)
-  await diamond.deployed()
-  console.log('Diamond deployed:', diamond.address)
+  // deploy Coal
+  const Coal = await ethers.getContractFactory('Coal')
+  const coal = await Coal.deploy(contractOwner.address, diamondCutFacet.address)
+  await coal.deployed()
+  console.log('Coal deployed:', coal.address)
 
   // deploy DiamondInit
   // DiamondInit provides a function that is called when the diamond is upgraded to initialize state variables
@@ -33,8 +33,7 @@ async function deployDiamond () {
   const FacetNames = [
     'DiamondLoupeFacet',
     'OwnershipFacet',
-    'CoalCutFacet',
-    'CoalStorageFacet'
+    'CoalCutFacet'
   ]
   const cut = []
   for (const FacetName of FacetNames) {
@@ -52,7 +51,7 @@ async function deployDiamond () {
   // upgrade diamond with facets
   console.log('')
   console.log('Diamond Cut:', cut)
-  const diamondCut = await ethers.getContractAt('IDiamondCut', diamond.address)
+  const diamondCut = await ethers.getContractAt('IDiamondCut', coal.address)
   let tx
   let receipt
   // call to init function
@@ -64,13 +63,13 @@ async function deployDiamond () {
     throw Error(`Diamond upgrade failed: ${tx.hash}`)
   }
   console.log('Completed diamond cut')
-  return diamond.address
+  return coal.address
 }
 
 // We recommend this pattern to be able to use async/await everywhere
 // and properly handle errors.
 if (require.main === module) {
-  deployDiamond()
+  deployCoal()
     .then(() => process.exit(0))
     .catch(error => {
       console.error(error)
@@ -78,4 +77,4 @@ if (require.main === module) {
     })
 }
 
-exports.deployDiamond = deployDiamond
+exports.deployCoal = deployCoal
