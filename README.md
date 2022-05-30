@@ -8,14 +8,18 @@ An upgradable static database implementation utilizing [EIP-2535 Diamonds](https
 
 Static data is stored in coal faces, which double as diamond facets. View `contracts/faces/Test1Face.sol` and `contracts/faces/Test2Face.sol` for reference. Both files contain 1,000 random addresses in bytes constants.
 
-`contracts/facets/CoalCutFacet.sol` is used to add, replace and remove faces. `contracts/facets/CoalStorageFacet.sol` is used to retrieve data and face information.
-Both facets are implemented internally in `contracts/libraries/LibCoal.sol`.
+Coal Storage IO facets:
+
+- `contracts/facets/CoalCutFacet.sol` is used to add, replace and remove faces.
+- `contracts/facets/CoalStorageFacet.sol` is used to retrieve data and face information.
+
+**Note:** Both facets are implemented internally in `contracts/libraries/LibCoal.sol`.
 
 There are two implemenation variations available:
 
-- `contracts/diamond/Diamond.sol` is a pure diamond that can implement `ICoalStorage` through `CoalStorageFacet`.
-- `contracts/Coal.sol` implements `ICoalStorage` internally to offer a (slightly) more gas efficient method of accessing Coal Storage. These functions remain upgradable with diamond cutting.
-The smart contract is deployed the same as the diamond-based implemenation, only without `CoalStorageFacet`.
+- `contracts/diamond/Diamond.sol` is a pure diamond that can implement ICoalStorage through CoalStorageFacet.
+- `contracts/Coal.sol` implements ICoalStorage internally to offer a (slightly) more gas efficient method of accessing Coal Storage. These functions remain upgradable with diamond cutting.
+The smart contract is deployed the same as the diamond-based implemenation, only without CoalStorageFacet.
 
 ## Deployment
 
