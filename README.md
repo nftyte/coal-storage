@@ -41,6 +41,11 @@ npx hardhat run scripts/deployCoal.js
 npx hardhat test
 ```
 
+## TODO
+
+- Emit `FaceCut` event for default `at(uint256)` and `faces()` in Coal implementation
+- Make default `at(uint256)` and `faces()` visible through loupe functions
+
 ## Contributing
 
 This is a WIP reference implementation. To contribute, feel free to open an issue or contact me.
