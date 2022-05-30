@@ -18,7 +18,7 @@ Coal Storage IO facets:
 There are two implemenation variations available:
 
 - `contracts/diamond/Diamond.sol` is a pure diamond that can implement ICoalStorage through CoalStorageFacet.
-- `contracts/Coal.sol` implements ICoalStorage internally to offer a (slightly) more gas efficient method of accessing Coal Storage. These functions remain upgradable with diamond cutting.
+- `contracts/Coal.sol` is a diamond that implements ICoalStorage internally to offer a (slightly) more gas efficient method of accessing Coal Storage. These functions remain upgradable with diamond cutting.
 The smart contract is deployed the same as the diamond-based implemenation, only without CoalStorageFacet.
 
 ## Deployment
