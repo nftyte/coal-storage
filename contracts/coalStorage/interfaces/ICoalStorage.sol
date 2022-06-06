@@ -1,9 +1,18 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import { ICoalStorage } from "./ICoalStorage.sol";
+interface ICoalStorage {
+    struct Face {
+        uint16 size;
+        bytes4 selector;
+    }
 
-interface ICoalCut {
+    // TODO add length getter
+    
+    function faces() external returns (Face[] memory);
+    
+    function at(uint256 _i) external returns (bytes memory);
+    
     function addFaces(ICoalStorage.Face[] calldata _faces) external;
 
     function removeFaces(uint256[] calldata _faces) external;

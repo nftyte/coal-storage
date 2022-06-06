@@ -1,29 +1,22 @@
 # Coal Storage Hardhat Implementation
 
-An upgradable static database implementation utilizing [EIP-2535 Diamonds](https://github.com/ethereum/EIPs/issues/2535) and [Diamond Storage](https://dev.to/mudgen/how-diamond-storage-works-90e).
+An upgradable static database reference implementation utilizing [EIP-2535 Diamonds](https://github.com/ethereum/EIPs/issues/2535) and [Diamond Storage](https://dev.to/mudgen/how-diamond-storage-works-90e).
 
-**Note:** This implementation uses [diamond-1](https://github.com/mudgen/diamond-1-hardhat). Other optimizations can be found [here](https://github.com/mudgen/diamond).
+**Note:** This implementation uses [impure-diamond](https://github.com/nftyte/impure-diamond) for simplicity. Other diamond implementations can be found [here](https://github.com/mudgen/diamond).
 
-## Usage
+## Faces
 
-Static data is stored in coal faces, which double as diamond facets. View `contracts/faces/Test1Face.sol` and `contracts/faces/Test2Face.sol` for reference. Both files contain 1,000 random addresses in bytes constants.
+Faces are diamond facets that store and enable access to static data chunks.
 
-Coal Storage IO facets:
+For example, the files `contracts/coalStorage/faces/Test1Face.sol` and `contracts/coalStorage/faces/Test2Face.sol` have 1,000 random addresses stored in bytecode.
 
-- `contracts/facets/CoalCutFacet.sol` is used to add, replace and remove faces.
-- `contracts/facets/CoalStorageFacet.sol` is used to retrieve data and face information.
-
-**Note:** Both facets are implemented internally in `contracts/libraries/LibCoal.sol`.
-
-There are two implemenation variations available:
-
-- `contracts/diamond/Diamond.sol` is a pure diamond that can implement ICoalStorage through CoalStorageFacet.
-- `contracts/Coal.sol` is a diamond that implements ICoalStorage internally to offer a (slightly) more gas efficient method of accessing Coal Storage. These functions remain upgradable with diamond cutting.
-The smart contract is deployed the same as the diamond-based implemenation, only without CoalStorageFacet.
+`contracts/coalStorage/abstract/CoalStorage.sol` can be used to retrieve and update face information. Its `at(uint256)` function can be used to retrieve an entry from faces as if they were a single array.
 
 ## Deployment
 
 ### Diamond
+
+A generic diamond that implements `ICoalStorage` through `CoalStorageFacet`.
 
 ```console
 npx hardhat run scripts/deployDiamond.js
@@ -31,9 +24,13 @@ npx hardhat run scripts/deployDiamond.js
 
 ### Coal
 
+A diamond that implements `ICoalStorage` directly to offer a (slightly) more gas efficient access to storage.
+
 ```console
 npx hardhat run scripts/deployCoal.js
 ```
+
+**Note:** `ICoalStorage` functions remain upgradable using diamond inclusions (see [impure-diamond](https://github.com/nftyte/impure-diamond#inclusions)).
 
 ## Tests
 
@@ -43,12 +40,9 @@ npx hardhat test
 
 ## TODO
 
-- Emit `FaceCut` event for default `at(uint256)` and `faces()` in Coal implementation
-- Make default `at(uint256)` and `faces()` visible through loupe functions
-
-## Contributing
-
-This is a WIP reference implementation. To contribute, feel free to open an issue or contact me.
+- [ ] Add documentation to coal storage components
+- [x] Emit `FacetCut` event for default `at(uint256)` and `faces()` in Coal implementation
+- [x] Make default `at(uint256)` and `faces()` visible through loupe functions
 
 ## Author
 
@@ -58,5 +52,4 @@ Contact: https://twitter.com/nftyte
 
 ## License
 
-MIT license. See the license file.
-Anyone can use or modify this software for their purposes.
+MIT license. Anyone can use or modify this software for their purposes.

@@ -2,10 +2,10 @@
 pragma solidity ^0.8.0;
 
 import { ICoalStorage } from "../interfaces/ICoalStorage.sol";
-import { LibDiamond } from "../diamond/libraries/LibDiamond.sol";
+import { LibDiamond } from "../../diamond/libraries/LibDiamond.sol";
 
 library LibCoal {
-    bytes32 constant COAL_STORAGE_POSITION = keccak256("diamond.standard.coal.storage");
+    bytes32 constant COAL_STORAGE_POSITION = keccak256("coal.storage");
 
     struct CoalStorage {
         ICoalStorage.Face[] faces;
@@ -44,7 +44,7 @@ library LibCoal {
 
         LibDiamond.DiamondStorage storage ds = LibDiamond.diamondStorage();
         
-        address facet = ds.facetAddressAndSelectorPosition[face].facetAddress;
+        address facet = ds.selectorInfo[face].facetAddress;
         require(facet != address(0), "LibCoal: Function does not exist");
         
         (bool success, bytes memory result) = facet.staticcall(abi.encodeWithSelector(face, i));
