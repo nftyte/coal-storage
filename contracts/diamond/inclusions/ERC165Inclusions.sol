@@ -16,8 +16,7 @@ contract ERC165Inclusions is IERC165, DiamondInclusions {
     /**
      * @dev See {IERC165-supportsInterface}.
      */
-    function supportsInterface(bytes4 interfaceId) external virtual override returns (bool) {
-        (bool success, bool result) = boolInclusionCall();
-        return success ? result : LibDiamond.diamondStorage().supportedInterfaces[interfaceId];
+    function supportsInterface(bytes4 interfaceId) external virtual override inclusion returns (bool) {
+        return LibDiamond.diamondStorage().supportedInterfaces[interfaceId];
     }
 }

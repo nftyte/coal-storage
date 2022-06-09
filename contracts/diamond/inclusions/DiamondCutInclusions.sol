@@ -20,11 +20,8 @@ contract DiamondCutInclusions is IDiamondCut, DiamondInclusions {
         FacetCut[] calldata _diamondCut,
         address _init,
         bytes calldata _calldata
-    ) external virtual override {
-        (bool success,) = inclusionCall();
-        if (!success) {
-            LibDiamond.enforceIsContractOwner();
-            LibDiamond.diamondCut(_diamondCut, _init, _calldata);
-        }
+    ) external virtual override inclusion {
+        LibDiamond.enforceIsContractOwner();
+        LibDiamond.diamondCut(_diamondCut, _init, _calldata);
     }
 }

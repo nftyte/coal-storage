@@ -19,45 +19,31 @@ contract CoalStorageInclusions is ICoalStorage, DiamondInclusions {
         LibDiamond.setSupportedInterface(type(ICoalStorage).interfaceId, true);
     }
     
-    function faces() external override returns (Face[] memory) {
-        (bool success, bytes memory result) = inclusionCall();
-        return success ? abi.decode(result, (Face[])) : LibCoal.faces();
+    function faces() external override inclusion returns (Face[] memory) {
+        return LibCoal.faces();
     }
     
-    function at(uint256 _i) external override returns (bytes memory) {
-        (bool success, bytes memory result) = inclusionCall();
-        return success ? abi.decode(result, (bytes)) : LibCoal.at(_i);
+    function at(uint256 _i) external override inclusion returns (bytes memory) {
+        return LibCoal.at(_i);
     }
     
-    function addFaces(ICoalStorage.Face[] calldata _faces) external override {
-        (bool success,) = inclusionCall();
-        if (!success) {
-            LibDiamond.enforceIsContractOwner();
-            LibCoal.addFaces(_faces);
-        }
+    function addFaces(ICoalStorage.Face[] calldata _faces) external override inclusion {
+        LibDiamond.enforceIsContractOwner();
+        LibCoal.addFaces(_faces);
     }
 
-    function removeFaces(uint256[] calldata _faces) external override {
-        (bool success,) = inclusionCall();
-        if (!success) {
-            LibDiamond.enforceIsContractOwner();
-            LibCoal.removeFaces(_faces);
-        }
+    function removeFaces(uint256[] calldata _faces) external override inclusion {
+        LibDiamond.enforceIsContractOwner();
+        LibCoal.removeFaces(_faces);
     }
 
-    function insertFaceAt(ICoalStorage.Face calldata _face, uint256 _i) external override {
-        (bool success,) = inclusionCall();
-        if (!success) {
-            LibDiamond.enforceIsContractOwner();
-            LibCoal.insertFaceAt(_face, _i);
-        }
+    function insertFaceAt(ICoalStorage.Face calldata _face, uint256 _i) external override inclusion {
+        LibDiamond.enforceIsContractOwner();
+        LibCoal.insertFaceAt(_face, _i);
     }
 
-    function removeFaceAt(uint256 _i) external override {
-        (bool success,) = inclusionCall();
-        if (!success) {
-            LibDiamond.enforceIsContractOwner();
-            LibCoal.removeFaceAt(_i);
-        }
+    function removeFaceAt(uint256 _i) external override inclusion {
+        LibDiamond.enforceIsContractOwner();
+        LibCoal.removeFaceAt(_i);
     }
 }

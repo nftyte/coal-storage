@@ -20,13 +20,7 @@ contract DiamondLoupeInclusions is IDiamondLoupe, DiamondInclusions {
     /**
      * @dev See {IDiamondLoupe-facets}.
      */
-    function facets() external virtual override returns (Facet[] memory facets_) {
-        (bool success, bytes memory result) = inclusionCall();
-
-        if (success) {
-            return abi.decode(result, (Facet[]));
-        }
-
+    function facets() external virtual override inclusion returns (Facet[] memory facets_) {
         LibDiamond.DiamondStorage storage ds = LibDiamond.diamondStorage();
         uint256 selectorCount = ds.selectors.length;
         // create an array set to the maximum size possible
@@ -84,14 +78,9 @@ contract DiamondLoupeInclusions is IDiamondLoupe, DiamondInclusions {
         external
         virtual
         override
+        inclusion
         returns (bytes4[] memory _facetFunctionSelectors)
     {
-        (bool success, bytes memory result) = inclusionCall();
-
-        if (success) {
-            return abi.decode(result, (bytes4[]));
-        }
-
         LibDiamond.DiamondStorage storage ds = LibDiamond.diamondStorage();
         uint256 selectorCount = ds.selectors.length;
         uint256 numSelectors;
@@ -118,14 +107,9 @@ contract DiamondLoupeInclusions is IDiamondLoupe, DiamondInclusions {
         external
         virtual
         override
+        inclusion
         returns (address[] memory facetAddresses_)
     {
-        (bool success, bytes memory result) = inclusionCall();
-
-        if (success) {
-            return abi.decode(result, (address[]));
-        }
-
         LibDiamond.DiamondStorage storage ds = LibDiamond.diamondStorage();
         uint256 selectorCount = ds.selectors.length;
         // create an array set to the maximum size possible
@@ -165,10 +149,9 @@ contract DiamondLoupeInclusions is IDiamondLoupe, DiamondInclusions {
         external
         virtual
         override
-        returns (address facetAddress_)
+        inclusion
+        returns (address)
     {
-        (bool success, address result) = addressInclusionCall();
-        facetAddress_ = success ? result :
-            LibDiamond.diamondStorage().selectorInfo[_functionSelector].facetAddress;
+        return LibDiamond.diamondStorage().selectorInfo[_functionSelector].facetAddress;
     }
 }
